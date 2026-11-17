@@ -1,60 +1,158 @@
-# Bài 6.1 & 6.2 – WinForms 3-Tier (DTO – DAL – BUS – GUI) với SQL Server
+# BÀI THỰC HÀNH 6.1 & 6.2 – LẬP TRÌNH WINDOWS FORMS
 
-Cả hai bài là project **.NET Framework 4.8 (WinForms)**, dùng `System.Data.SqlClient` có sẵn trong .NET Framework nên **không cần cài NuGet**.
-Mở bằng **Visual Studio 2019/2022** (cần workload ".NET desktop development").
+**Công nghệ:** C# WinForms – .NET Framework 4.8 – SQL Server  
+**Mô hình:** 3-Tier (DTO – DAL – BUS – GUI)
 
-## Cách chạy
-1. Mở **SSMS**, chạy file SQL: `Bai6_1_RetailSales/SalesDB.sql` và `Bai6_2_HRM/HRMDB.sql` (đã có dữ liệu mẫu).
-2. Mở `RetailSales.sln` (hoặc `HRM.sln`) trong Visual Studio.
-3. Sửa chuỗi kết nối trong `App.config` cho đúng máy của bạn:
-   - `Data Source=.` (SQL Server mặc định)
-   - `Data Source=.\SQLEXPRESS` (bản Express)
-   - `Data Source=(localdb)\MSSQLLocalDB` (LocalDB)
-4. Nhấn **F5** để chạy.
+## MỤC 1: THÔNG TIN SINH VIÊN
 
-## Về "kéo thả"
-Mỗi form có đủ cặp `frmX.cs` + `frmX.Designer.cs` theo đúng chuẩn Visual Studio.
-Bấm đúp vào `frmX.cs` (hoặc chuột phải → *View Designer*) để mở giao diện thiết kế: bạn có thể kéo thả,
-đổi vị trí/kích thước/Text của control trong Toolbox + Properties như bình thường. Nếu thêm nút mới,
-bấm đúp vào nút để VS tạo handler `Click` trong `frmX.cs`.
-**Lưu ý:** đừng đổi `Name` của control đang được code sử dụng (txtMaSP, dgvSanPham, btnThem...) nếu chưa sửa lại code.
+- **Họ và tên sinh viên:** Trần Ngọc Anh
+- **Mã sinh viên:** 24810310211
+- **Lớp / Khóa:** D19CNPM3
+- **Trường:** Đại học Điện lực
+- **Khoa:** Điện toán và công nghệ số năng lượng 
 
-## Cấu trúc (3-Tier)
-```
-DTO/  đối tượng truyền dữ liệu (SanPhamDTO, HoaDonDTO, ...)
-DAL/  truy cập CSDL (DbHelper + *DAL) – toàn bộ dùng SqlParameter
-BUS/  nghiệp vụ + kiểm tra dữ liệu (*BUS, ErrorHelper)
-GUI/  các form WinForms
-```
-Luồng gọi: `GUI → BUS → DAL → SQL Server`. GUI không bao giờ gọi trực tiếp DAL.
+---
 
-## Bài 6.1 – đối chiếu yêu cầu
-| Yêu cầu | Nằm ở đâu |
+## MỤC 2: HÌNH ẢNH KẾT QUẢ CÁC MÀN HÌNH CHỨC NĂNG
+
+Các hình ảnh dưới đây minh họa kết quả chạy chương trình thực tế trên Visual Studio.
+
+### 1. Màn hình chính / Tổng quan hệ thống
+
+Hiển thị giao diện chính của ứng dụng và các chức năng quản lý.
+
+![Màn hình chính](images/01_main_screen.png)
+
+### 2. Màn hình quản lý danh mục (CRUD)
+
+Minh họa chức năng thêm, sửa, xóa và tìm kiếm dữ liệu trong hệ thống.
+
+![Màn hình CRUD](images/02_crud_screen.png)
+
+### 3. Màn hình thực thi nghiệp vụ chính
+
+Minh họa nghiệp vụ bán hàng, lập hóa đơn hoặc chấm công của chương trình.
+
+![Màn hình nghiệp vụ](images/03_transaction_screen.png)
+
+### 4. Màn hình báo cáo – thống kê
+
+Hiển thị doanh thu, sản phẩm bán chạy hoặc kết quả thống kê, tính lương.
+
+![Màn hình thống kê](images/04_report_screen.png)
+
+### 5. Minh họa an toàn dữ liệu và xử lý lỗi
+
+Minh họa chương trình xử lý lỗi khi nhập dữ liệu không hợp lệ, sử dụng câu lệnh SQL có tham số hoặc thực hiện Transaction Rollback.
+
+![Minh họa xử lý lỗi](images/05_error_handling.png)
+
+---
+
+## MỤC 3: GIỚI THIỆU CHƯƠNG TRÌNH
+
+Bài thực hành gồm hai ứng dụng Windows Forms xây dựng bằng C# theo mô hình 3-Tier, sử dụng SQL Server để lưu trữ dữ liệu.
+
+**Bài 6.1 – Quản lý bán hàng:**
+
+- Quản lý sản phẩm, khách hàng, nhân viên.
+- Lập hóa đơn bán hàng.
+- Tính tiền và điểm tích lũy.
+- Quản lý tồn kho khi bán hàng.
+- Thống kê doanh thu và sản phẩm bán chạy.
+
+**Bài 6.2 – Quản lý nhân sự:**
+
+- Quản lý thông tin nhân viên.
+- Quản lý phòng ban.
+- Chuyển phòng ban.
+- Quản lý chấm công.
+- Tính và chốt lương nhân viên.
+
+Cả hai project sử dụng **.NET Framework 4.8**, thư viện `System.Data.SqlClient` có sẵn nên không cần cài thêm NuGet.
+
+Chương trình được mở và chạy bằng Visual Studio 2019/2022 với workload ".NET desktop development".
+
+---
+
+## MỤC 4: HƯỚNG DẪN CÀI ĐẶT VÀ CHẠY
+
+### Bước 1: Khởi tạo cơ sở dữ liệu
+
+Mở SQL Server Management Studio (SSMS), chạy lần lượt các file:
+
+- `Bai6_1_RetailSales/SalesDB.sql`
+- `Bai6_2_HRM/HRMDB.sql`
+
+Các file SQL đã có dữ liệu mẫu.
+
+### Bước 2: Mở project
+
+Mở một trong hai file bằng Visual Studio:
+
+- `RetailSales.sln`
+- `HRM.sln`
+
+### Bước 3: Cấu hình kết nối SQL Server
+
+Mở file `App.config` và chỉnh chuỗi kết nối phù hợp với SQL Server trên máy.
+
+Ví dụ:
+
+- `Data Source=.` – SQL Server mặc định.
+- `Data Source=.\SQLEXPRESS` – SQL Server Express.
+- `Data Source=(localdb)\MSSQLLocalDB` – LocalDB.
+
+### Bước 4: Chạy chương trình
+
+Nhấn **F5** trong Visual Studio để chạy và kiểm tra các chức năng.
+
+---
+
+## MỤC 5: THIẾT KẾ GIAO DIỆN WINDOWS FORMS
+
+Giao diện được xây dựng bằng Windows Forms Designer của Visual Studio.
+
+Mỗi màn hình có các file:
+
+- `frmX.cs`: Xử lý các sự kiện và nghiệp vụ giao diện.
+- `frmX.Designer.cs`: Khởi tạo và bố trí các thành phần giao diện.
+
+Để mở chế độ thiết kế, nhấn chuột phải vào file `frmX.cs` và chọn **View Designer**.
+
+Có thể kéo thả, thay đổi kích thước và chỉnh sửa các thành phần bằng Toolbox và Properties.
+
+Lưu ý: Không tự ý thay đổi tên các control đang được sử dụng trong code như `txtMaSP`, `dgvSanPham`, `btnThem` nếu chưa sửa các tham chiếu tương ứng.
+
+---
+
+## MỤC 6: CẤU TRÚC CHƯƠNG TRÌNH (3-TIER)
+
+Chương trình được tổ chức thành các tầng:
+
+| Tầng | Chức năng |
 |---|---|
-| CSDL 5 bảng + khóa ngoại/ràng buộc | `SalesDB.sql` |
-| CRUD Sản phẩm / Khách hàng / Nhân viên | `frmSanPham`, `frmKhachHang`, `frmNhanVien` + BUS/DAL tương ứng |
-| Tìm SP theo tên/mã vạch, `SqlParameter` + `%` | `SanPhamDAL.Search` (`"%" + keyword + "%"`) |
-| Bán hàng: quét mã/chọn SP, giỏ hàng DataGridView, khách lẻ, tổng tiền, điểm | `frmBanHang` (ô *Quét mã vạch*: gõ/quét mã rồi Enter) |
-| **SqlTransaction**: chèn HoaDon → ChiTiet → trừ tồn (thiếu hàng → Rollback + báo lỗi) → cộng điểm → Commit | `HoaDonDAL.LapHoaDon` |
-| Điểm tích lũy `+= TongTien / 100000` | `HoaDonBUS.TinhDiem` |
-| Doanh thu ngày/tháng bằng `ExecuteScalar` | `BaoCaoDAL.TongDoanhThu` |
-| Top 5 bán chạy bằng `SqlDataReader` | `BaoCaoDAL.TopSanPham` |
+| DTO | Chứa các đối tượng truyền dữ liệu |
+| DAL | Truy cập và thao tác cơ sở dữ liệu |
+| BUS | Xử lý nghiệp vụ và kiểm tra dữ liệu |
+| GUI | Hiển thị giao diện và tương tác với người dùng |
 
-## Bài 6.2 – đối chiếu yêu cầu
-| Yêu cầu | Nằm ở đâu |
+Luồng xử lý:
+
+`GUI → BUS → DAL → SQL Server`
+
+GUI không gọi trực tiếp DAL.
+
+---
+
+## MỤC 7: CÁC CHỨC NĂNG BÀI 6.1 – QUẢN LÝ BÁN HÀNG
+
+| Yêu cầu | Vị trí thực hiện |
 |---|---|
-| CSDL 4 bảng | `HRMDB.sql` |
-| CRUD nhân viên, chuyển phòng ban, tìm theo tên/phòng ban/CCCD (parameterized) | `frmNhanVien`, `NhanVienDAL.Search`, `ChuyenPhongBan` |
-| Chấm công ngắt kết nối: `SqlDataAdapter` → `DataTable` → DataGridView, nhập trực tiếp trên lưới | `frmChamCong`, `ChamCongDAL.Load` |
-| "Lưu chấm công": `SqlCommandBuilder` + `adapter.Update()` | `ChamCongDAL.Save` |
-| Công thức lương `(LCB*HS/22)*Công + OT*50.000` | `LuongBUS.TinhThucLinh` |
-| "Chốt lương tháng": **SqlTransaction** ghi BangLuong + khóa chấm công | `LuongDAL.ChotLuong` |
-| Quản lý phòng ban (cho combobox / chuyển phòng ban) | `frmPhongBan` |
-
-## Những chỗ đề bài mâu thuẫn / thiếu và cách xử lý
-- **BangLuong** (6.2): đề ghi vừa `MaLuong` (Identity) vừa "Primary Key (MaNV, ThangNam)". Mình đặt `MaLuong` là PRIMARY KEY và thêm `UNIQUE (MaNV, ThangNam)` (mỗi người một dòng lương/tháng).
-- **BangChamCong**: thêm `UNIQUE (MaNV, ThangNam)` và cột `DaKhoa BIT` để thực hiện yêu cầu "khóa dữ liệu chấm công".
-- `SoNgayCong` kiểm tra `0..31` (đề chỉ ghi `<= 31`).
-- **Số điện thoại / CCCD** là `UNIQUE` nên ứng dụng bắt buộc nhập (SQL Server chỉ cho phép 1 giá trị NULL trong cột UNIQUE).
-- "Khách lẻ" = `HoaDon.MaKH` là NULL, không cộng điểm.
-- Không xóa được sản phẩm/nhân viên/phòng ban đã phát sinh dữ liệu liên quan (ràng buộc khóa ngoại) – chương trình hiện thông báo thân thiện.
+| Cơ sở dữ liệu 5 bảng, khóa ngoại và ràng buộc | `SalesDB.sql` |
+| CRUD sản phẩm, khách hàng, nhân viên | `frmSanPham`, `frmKhachHang`, `frmNhanVien` |
+| Tìm sản phẩm theo tên, mã vạch | `SanPhamDAL.Search` |
+| Sử dụng SqlParameter và LIKE | `SanPhamDAL.Search` |
+| Bán hàng, quét mã vạch, giỏ hàng | `frmBanHang` |
+| Lập hóa đơn và xử lý giao dịch | `HoaDonDAL.LapHoaDon` |
+| Tính
